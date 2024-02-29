@@ -3,7 +3,7 @@
 
 // gameboard (height, width)
 // this returns the initial grid
-const Gameboard = (function () {
+const Gameboard = (() => {
 
     // Return an array with nine items
     return Array[9].fill("");
@@ -28,7 +28,7 @@ const Gameboard = (function () {
 })();
 
 
-const Game = () => {
+const Game = (() => {
     const board = Gameboard();
 
     // Take a turn
@@ -51,9 +51,10 @@ const Game = () => {
         // Game draw?
         
     }
-}
+})();
 
-const Player = ((name) => {
+
+const Player = (name) => {
 
     let name = name; 
     let wins = 0;
@@ -65,7 +66,7 @@ const Player = ((name) => {
     setName = (name) => {
         name = name;
     }
-})();
+};
 
 const Score = (() => {
     let round = 0;
