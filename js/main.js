@@ -6,7 +6,9 @@
 const gameboard = (() => {
 
     // Create the gameboard array
-    const board = Array(9).fill("");
+    // const board = Array(9).fill("");
+    const board = [...Array(9).keys()];
+
 
     // Add marker to position (grid, marker, pos)
     const addMarker = (marker, pos) => {
@@ -27,22 +29,20 @@ const gameboard = (() => {
             return false;
         }
     }
+    
 
     const _verifyMatchingMarkers = (args) => {
-        // Returns true if all markers match
-        args.forEach(marker => {
-            // If any marker does not match the first one
-            if (marker !== args[0]) {
-                return false;
-            }
-        });
-
-        return true;
+        // Returns true if all markers match; else false
+        return args.reduce((a, b) => {
+            return (a === b) ? b : false;
+        }) === false ? false : true;
     }
+
 
     // Did someone win? (grid) 
     const checkForWin = () => {
         // Returns an array [win(true?), marker(X or O?)]
+
 
         // Check for diagonal win
         if (board[4] !== "") {
@@ -57,6 +57,16 @@ const gameboard = (() => {
                 return [true, board[4]];
             }
         }
+
+        const rows = [];
+        const columns = [];
+
+
+        for (let i = 0; i < 3; i++) {
+            rows.push([board[0+i], board[1+i], board[2+i]]);
+        }
+
+        console.log(columns, rows);
 
         // Check wins in the rows and columns
         // Create arrays of every possible row and column combo
