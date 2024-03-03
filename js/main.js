@@ -11,13 +11,20 @@ const gameboard = (() => {
     // Add marker to position (grid, marker, pos)
     const addMarker = (marker, pos) => {
         // Is it a legit move?
-        if (typeof(marker) === typeof("")) {
-            if (marker.toLowerCase() === "x" || marker.toLowerCase() === "o") {
-                console.log(marker);
+        if (typeof(marker) === typeof("") && typeof(pos) === typeof(0)) {
+            if ((marker.toLowerCase() === "x" || marker.toLowerCase() === "o") && pos >= 0 && pos <= 8) {
+                console.log(marker, pos);
+                if (board[pos] === "") {
+                    board[pos] = marker;
+                    return true;
+                }
+                else {
+                    return false;
+                }
             }
         }
         else {
-
+            return false;
         }
     }
 
@@ -34,7 +41,7 @@ const gameboard = (() => {
     }
 
     // Did someone win? (grid) 
-    const playerHasWon = () => {
+    const checkForWin = () => {
         // Returns an array [win(true?), marker(X or O?)]
 
         // Check for diagonal win
@@ -61,30 +68,68 @@ const gameboard = (() => {
         
     }
 
+    const checkForDraw = () => {
+        if (!board.includes("")) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    const getBoard = () => {
+        return board;
+    }
+
     const clear = () => {
         board = Array(9).fill("");
     }
 
     return {
-        playerHasWon,
+        checkForWin,
+        checkForDraw,
         addMarker,
-        clear, 
+        clear,
+        getBoard,
     }
 })();
 
 
 const gameController = (() => {
 
+    let playerX;
+    let playerO;
+    let turn = 0;
 
-    // Take a turn
+    const whosTurn = () => {
+        // If turn is uneven X goes
+        if (turn % 2 !== 0 || turn === 0) {
+            return "x";
+        }
+        else {
+            return "o";
+        }
+    }
+
+    // Take a turn (my research shows X starts according to most conventions)
+    // That means X will always take turns on uneven turns (assuming we start with 0)
     const takeTurn = () => {
-        
+        // What do I have to do in every turn?
+        // I need to get player input (position)
+        // I need to addMarker to gameboard with the position and marker from whosTurn
+        // I need to checkForWin and checkForDraw
+
+        // Only ask for input for whosTurn if player is of type Player
+        // No input needed if player is AI
+
+        // How do I get input to make the game playable in the console or in the UI?
     }
 
 
 
     return {
-
+        whosTurn,
+        takeTurn,
     }
 })();
 
