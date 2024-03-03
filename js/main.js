@@ -7,7 +7,8 @@ const gameboard = (() => {
 
     // Create the gameboard array
     // const board = Array(9).fill("");
-    const board = [...Array(9).keys()];
+    // const board = [...Array(9).keys()];
+    const board = ["o", "x", "x", "x", "o", "o", "x", "o", "x"];
 
 
     // Add marker to position (grid, marker, pos)
@@ -29,7 +30,7 @@ const gameboard = (() => {
             return false;
         }
     }
-    
+
 
     const _verifyMatchingMarkers = (args) => {
         // Returns true if all markers match; else false
@@ -48,7 +49,7 @@ const gameboard = (() => {
         if (board[4] !== "") {
             // It will be either X or O in the middle
             // Check for positive diagonal win
-            if (board[0] !== "" && board[8] !== "" && _verifyMatchingMarkers([board[0], board[4], board[8]])) {
+            if (board[0] !== "" && board[8] !== "" && _verifyMatchingMarkers([board[2], board[4], board[6]])) {
                 return [true, board[4]];
             }
 
@@ -58,24 +59,39 @@ const gameboard = (() => {
             }
         }
 
+        // Check for wins in the rows and columns
         const rows = [];
         const columns = [];
 
+        let win = false;
 
         for (let i = 0; i < 3; i++) {
-            rows.push([board[0+i], board[1+i], board[2+i]]);
+            rows.push([
+                board[0+(3*i)],
+                board[1+(3*i)],
+                board[2+(3*i)],
+            ])
+
+            columns.push([
+                board[(3*1)-3+i],
+                board[(3*2)-3+i],
+                board[(3*3)-3+i],
+            ])
         }
 
-        console.log(columns, rows);
+        rows.forEach(row => {
+            if (_verifyMatchingMarkers(row)) {
+                win = [true, row[0]];
+            }
+        })
 
-        // Check wins in the rows and columns
-        // Create arrays of every possible row and column combo
-        // Check these arrays in _verifymatchingMarkers
-        // If anyone is true a Player has won
+        columns.forEach(column => {
+            if (_verifyMatchingMarkers(column)) {
+                win = [true, column[0]];
+            }
+        })
 
-        // Have all positions been checked and none is empty anymore?
-        // Game draw?
-        
+        return win;
     }
 
     const checkForDraw = () => {
