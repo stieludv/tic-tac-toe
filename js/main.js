@@ -8,7 +8,7 @@ const gameboard = (() => {
     // Create the gameboard array
     // const board = Array(9).fill("");
     // const board = [...Array(9).keys()];
-    const board = ["o", "x", "x", "x", "o", "o", "x", "o", "x"];
+    let board = ["o", "x", "x", "x", "o", "o", "x", "o", "x"];
 
 
     // Add marker to position (grid, marker, pos)
@@ -80,13 +80,13 @@ const gameboard = (() => {
         }
 
         rows.forEach(row => {
-            if (_verifyMatchingMarkers(row)) {
+            if (_verifyMatchingMarkers(row) && row[0] !== "") {
                 win = [true, row[0]];
             }
         })
 
         columns.forEach(column => {
-            if (_verifyMatchingMarkers(column)) {
+            if (_verifyMatchingMarkers(column) && column[0] !== "") {
                 win = [true, column[0]];
             }
         })
