@@ -1,8 +1,3 @@
-
-
-
-// gameboard (height, width)
-// this returns the initial grid
 const gameboard = (() => {
 
     // Create the gameboard array
@@ -126,23 +121,8 @@ const gameboard = (() => {
 
 const gameController = (() => {
 
-    /*
-     * The game is now "playbale" using the gameboard and its methods.
-     * Thus, the game can be connected to any kind of UI, etc to play it.
-     * I will connect it to the DOM using event listners but it could be played in consoles too.
-     * It could use prompts and alerts or stdout and stdin to be played.
-     */
-
-    /*
-    * I could practice git branches by making this game playable without a DOM interface on the web.
-    * Or by playing it in a console, such as by using stdout and stdin.
-    */
-
-    
-
-    let playerX;
-    let playerO;
     let turn = 0;
+
 
     const whosTurn = () => {
         // If turn is uneven X goes
@@ -153,6 +133,7 @@ const gameController = (() => {
             return "o";
         }
     }
+
 
     // Take a turn (my research shows X starts according to most conventions)
     // That means X will always take turns on uneven turns (assuming we start with 0)
@@ -183,121 +164,11 @@ const gameController = (() => {
         // No input needed if player is AI
 
         // How do I get input to make the game playable in the console or in the UI?
-
-
     }
-
-    const setPlayerX = (player) => {
-        playerX = player
-    }
-
-    const setPlayerO = (player) => {
-        playerO = player
-    }
-
 
 
     return {
         whosTurn,
         takeTurn,
-        setPlayerO,
-        setPlayerX,
     }
 })();
-
-
-const Player = (playerName) => {
-    // Players could keep track of their respective scores
-    // This way scores could be saved, leadersboards, etc
-    // Otherwise scoreController will only track and save scores across some game
-    // Players could change between games, but the score would not in scoreController
-    // Persistant storage?
-
-    // Player does not have a "type".
-    // X or O is decided on "side" by gameController
-    // Thus a player could switch sides mid-game through gameController alone
-    // Game controller knows whos turn it is, and what turn they are.
-
-    let name = playerName;
-    // Tracks overall wins (both as X and O)
-    let wins = 0;
-
-    // Could implement tracking of ties here too and respective wins as X and O
-
-    const winIncrement = () => {
-        wins++;
-    }
-
-    const setName = (name) => {
-        name = name;
-    }
-
-    const getName = () => {
-        return name;
-    }
-
-    const getWins = () => {
-        return wins;
-    }
-
-    return {
-        winIncrement,
-        setName,
-        getName,
-        getWins,
-    }
-};
-
-
-const scoreController = (() => {
-    // Persistant storage?
-    // See Player for more info.
-
-    let round = 0;
-    let ties = 0;
-    let winX = 0;
-    let winO = 0;
-
-    const nextRound = () => {
-        round++;
-    }
-
-    const tieIncrement = () => {
-        ties++;
-    }
-
-    const resetScore = () => {
-        round = 0;
-        ties = 0;
-    }
-
-    const getScore = () => {
-        return {
-            "rounds": round,
-            "ties": ties
-        }
-    }
-
-    const winXIncrement = () => {
-        winX++;
-    }
-
-
-    const winOIncrement = () => {
-        winO++;
-    }
-
-    return {
-        nextRound,
-        tieIncrement,
-        resetScore,
-        winXIncrement,
-        winOIncrement
-    }
-})();
-
-
-const displayController = (() => {
-    // Update display
-})();
-
