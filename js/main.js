@@ -6,9 +6,9 @@
 const gameboard = (() => {
 
     // Create the gameboard array
-    // const board = Array(9).fill("");
+    let board = Array(9).fill("");
     // const board = [...Array(9).keys()];
-    let board = ["o", "x", "x", "x", "o", "o", "x", "o", "x"];
+    // let board = ["o", "x", "x", "x", "o", "o", "x", "o", "x"];
 
 
     // Add marker to position (grid, marker, pos)
@@ -120,47 +120,7 @@ const gameboard = (() => {
     }
 })();
 
-
-const gameController = (() => {
-
-    let playerX;
-    let playerO;
-    let turn = 0;
-
-    const whosTurn = () => {
-        // If turn is uneven X goes
-        if (turn % 2 !== 0 || turn === 0) {
-            return "x";
-        }
-        else {
-            return "o";
-        }
-    }
-
-    // Take a turn (my research shows X starts according to most conventions)
-    // That means X will always take turns on uneven turns (assuming we start with 0)
-    const takeTurn = () => {
-        // What do I have to do in every turn?
-        // I need to get player input (position)
-        // I need to addMarker to gameboard with the position and marker from whosTurn
-        // I need to checkForWin and checkForDraw
-
-        // Only ask for input for whosTurn if player is of type Player
-        // No input needed if player is AI
-
-        // How do I get input to make the game playable in the console or in the UI?
-    }
-
-
-
-    return {
-        whosTurn,
-        takeTurn,
-    }
-})();
-
-
-const Player = (playerName) => {
+const player = (playerName) => {
     // Players could keep track of their respective scores
     // This way scores could be saved, leadersboards, etc
     // Otherwise scoreController will only track and save scores across some game
@@ -202,6 +162,55 @@ const Player = (playerName) => {
     }
 };
 
+const gameController = (() => {
+
+    let playerX = player("Player1");
+    let playerO = player("Player2");
+    const players = [playerX, playerO];
+
+    let turn = 0;
+
+    const whosTurn = () => {
+        // If turn is even or zero X goes
+        if (turn % 2 === 0 || turn === 0) {
+            return "x";
+        }
+        else {
+            return "o";
+        }
+    };
+
+    const getPlayers = () => {
+        return players;
+    };
+
+    const play = (pos) => {
+        // We already know marker because we have determined whosTurn
+        const newPos = gameboard.addMarker(whosTurn(), pos);
+        if (newPos !== undefined) {
+            // Handle if it did not and when it can add new marker to board
+
+            // Only increment turn if addMarker was successfull
+            // Otherwise the wrong marker may be added on the next attempt
+            turn++;
+        }
+
+        // Check the following too
+        const gameStatus = gameboard.checkForWin();
+        const gameDraw = gameboard.checkForDraw();
+
+        console.log(gameboard.getBoard(), gameStatus, gameDraw);
+    };
+
+    // Take a turn (my research shows X starts according to most conventions)
+    // That means X will always take turns on uneven turns (assuming we start with 0)
+
+    return {
+        whosTurn,
+        play,
+        getPlayers,
+    }
+})();
 
 const scoreController = (() => {
     // Persistant storage?
