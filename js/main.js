@@ -212,6 +212,7 @@ const gameController = (() => {
     }
 })();
 
+// Redundant for now - player tracks their own wins 
 const scoreController = (() => {
     // Persistant storage?
     // See Player for more info.
@@ -259,8 +260,76 @@ const scoreController = (() => {
     }
 })();
 
-
 const displayController = (() => {
-    // Update display
+    const container = document.querySelector(".container");
+
+    // Render HTML in DOM
+    const renderGameboard = () => {
+        // A bunch of button elements?
+        if (gameboard.getBoard().length === 9) {
+            const gameboardNode = document.createElement("div");
+            gameboardNode.classList.add("gameboard");
+
+            // Create buttons based on gameboard data
+            const buttons = gameboard.getBoard().map((cellValue) => {
+              const button = document.createElement("button");
+              button.textContent = cellValue; // Set button text based on cell value
+              return button;
+            });
+      
+            // Append buttons to the gameboardNode
+            buttons.forEach((button) => gameboardNode.appendChild(button));
+      
+            // Append the gameboardNode to the container
+            container.appendChild(gameboardNode);
+        }
+        else {
+            console.error("Gameboard is not of correct size");
+        }
+    }
+
+    const renderPlayerScore = () => {
+        // A text element that will be positioned under players name?
+    }
+
+    const renderPlayerName = () => {
+        // Text element that will be under left/right of rendered gameboard
+    }
+
+    // Update text in DOM
+    const updatePlayerScore = () => {
+
+    }
+
+    const updatePlayerName = () => {
+
+    }
+
+    return {
+        renderGameboard,
+        renderPlayerScore,
+        renderPlayerName,
+        updatePlayerScore,
+        updatePlayerName,
+    }
 })();
 
+// Event handlers
+// Check if the page has been loaded - run render methods
+const handlePageLoad = (() => {
+    window.onload = () => {
+        displayController.renderGameboard();
+    }
+})();
+
+// Check for potential input (player clicks on square of tic-tac-toe in DOM)
+const handlePlayEvent = (() => {
+
+})();
+
+// Check if player name is being edited 
+const handlePlayerNameChange = (() => {
+
+})();
+
+// Check if reset button pressed
