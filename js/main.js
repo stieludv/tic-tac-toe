@@ -1,7 +1,5 @@
 
 
-
-// gameboard (height, width)
 // this returns the initial grid
 const gameboard = (() => {
 
@@ -310,7 +308,10 @@ const displayController = (() => {
             });
       
             // Append buttons to the gameboardNode
-            buttons.forEach((button) => gameboardNode.appendChild(button));
+            buttons.forEach((button, index) => {
+                button.classList.add(`button-${index}`);
+                gameboardNode.appendChild(button);
+            });
       
             // Append the gameboardNode to the container
             container.appendChild(gameboardNode);
@@ -318,6 +319,17 @@ const displayController = (() => {
         else {
             console.error("Gameboard is not of correct size");
         }
+    }
+
+
+    const updateGameboard = () => {
+        // map and check if gameboard has changed
+        // If it has changed update gameboard var here
+        // Update DOM
+        console.log(gameboard.getBoard());
+        const gameboardContainer = document.querySelector(".gameboard");
+        gameboardContainer.remove();
+        displayController.renderGameboard();
     }
 
     const renderPlayerScore = () => {
@@ -343,6 +355,7 @@ const displayController = (() => {
         renderPlayerName,
         updatePlayerScore,
         updatePlayerName,
+        updateGameboard,
     }
 })();
 
@@ -351,6 +364,9 @@ const displayController = (() => {
 const handlePageLoad = (() => {
     window.onload = () => {
         displayController.renderGameboard();
+        
+        // Add displayController cb functions to cb list in gameController
+        gameController.addCallback(displayController.updateGameboard);
     }
 })();
 
