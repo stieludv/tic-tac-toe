@@ -14,7 +14,6 @@ const gameboard = (() => {
         // Is it a legit move?
         if (typeof(marker) === typeof("") && typeof(pos) === typeof(0)) {
             if ((marker.toLowerCase() === "x" || marker.toLowerCase() === "o") && pos >= 0 && pos <= 8) {
-                console.log(marker, pos);
                 if (board[pos] === "") {
                     board[pos] = marker;
                     return true;
@@ -188,7 +187,7 @@ const gameController = (() => {
         // That means X will always take turns on uneven turns (assuming we start with 0)
 
         const newPos = gameboard.addMarker(whosTurn(), pos);
-        if (newPos !== undefined) {
+        if (newPos !== false) {
             // Handle if it did not and when it can add new marker to board
 
             // Only increment turn if addMarker was successfull
