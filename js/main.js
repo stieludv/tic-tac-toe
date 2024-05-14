@@ -186,6 +186,9 @@ const gameController = (() => {
 
     const play = (pos) => {
         // We already know marker because we have determined whosTurn
+        // Take a turn (my research shows X starts according to most conventions)
+        // That means X will always take turns on uneven turns (assuming we start with 0)
+
         const newPos = gameboard.addMarker(whosTurn(), pos);
         if (newPos !== undefined) {
             // Handle if it did not and when it can add new marker to board
@@ -193,6 +196,7 @@ const gameController = (() => {
             // Only increment turn if addMarker was successfull
             // Otherwise the wrong marker may be added on the next attempt
             turn++;
+            _invokeCallbacks();
         }
 
         // Check the following too
@@ -200,15 +204,43 @@ const gameController = (() => {
         const gameDraw = gameboard.checkForDraw();
 
         console.log(gameboard.getBoard(), gameStatus, gameDraw);
+
+        if (gameStatus !== false) {
+            if (gameStatus[1] === "x") {
+                playerX.winIncrement();
+            }
+            if (gameStatus[1] === "o") {
+                playerO.winIncrement();
+            }
+
+            _invokeCallbacks();
+        }
+
+        if (gameDraw !== false) {
+            // Draw
+            _invokeCallbacks();
+        }
     };
 
-    // Take a turn (my research shows X starts according to most conventions)
-    // That means X will always take turns on uneven turns (assuming we start with 0)
+    const callbacks = [];
+
+    const addCallback = (cb) => {
+        // Add callbacks that will run after every event in gameController
+        callbacks.push(cb);
+    }
+
+    const _invokeCallbacks = () => {
+        // Invoke all registered callbacks
+        callbacks.forEach((cb) => {
+            cb(/* Pass any relevant data here */);
+        });
+    }
 
     return {
         whosTurn,
         play,
         getPlayers,
+        addCallback,
     }
 })();
 
