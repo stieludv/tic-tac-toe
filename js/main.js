@@ -340,6 +340,16 @@ const displayController = (() => {
 
     const renderPlayerScore = () => {
         // A text element that will be positioned under players name?
+
+    }
+
+    const renderWinnerDisplay = () => {
+        // Render "Start game"
+    }
+
+    const updateWinnerDisplay = () => {
+        // How should I know which player won here?
+        // Perhaps I should check and compare each players wins 
     }
 
     const renderPlayerName = () => {
@@ -396,3 +406,8 @@ const handlePlayerNameChange = (() => {
 })();
 
 // Check if reset button pressed
+
+
+const gameEventListeners = (() => {
+    // Include all event listeners in here?
+})();
