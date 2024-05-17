@@ -308,7 +308,7 @@ const displayController = (() => {
       
             // Append buttons to the gameboardNode
             buttons.forEach((button, index) => {
-                button.classList.add(`button-${index}`);
+                button.setAttribute("data-cell", `${index}`);
                 gameboardNode.appendChild(button);
             });
       
@@ -327,8 +327,15 @@ const displayController = (() => {
         // Update DOM
         console.log(gameboard.getBoard());
         const gameboardContainer = document.querySelector(".gameboard");
+
+        // Remove all buttons
         gameboardContainer.remove();
+
+        // Re-render all buttons
         displayController.renderGameboard();
+
+        // Re-add event listeners
+        listenForPlayEvent();
     }
 
     const renderPlayerScore = () => {
@@ -362,7 +369,11 @@ const displayController = (() => {
 // Check if the page has been loaded - run render methods
 const handlePageLoad = (() => {
     window.onload = () => {
+        // Render gameboard
         displayController.renderGameboard();
+
+        // After gameboard is rendered we can add event listeners on the rendered game
+        listenForPlayEvent();
         
         // Add displayController cb functions to cb list in gameController
         gameController.addCallback(displayController.updateGameboard);
@@ -370,9 +381,14 @@ const handlePageLoad = (() => {
 })();
 
 // Check for potential input (player clicks on square of tic-tac-toe in DOM)
-const handlePlayEvent = (() => {
-
-})();
+const listenForPlayEvent = () => {
+    const displayButtons = document.querySelectorAll("[data-cell]");
+    displayButtons.forEach((button) => {
+        button.addEventListener("click", (e) => {
+            gameController.play(Number(e.target.getAttribute("data-cell")));
+        })
+    })
+};
 
 // Check if player name is being edited 
 const handlePlayerNameChange = (() => {
