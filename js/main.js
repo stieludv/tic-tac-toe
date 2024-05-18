@@ -164,6 +164,7 @@ const gameController = (() => {
     let playerX = player("Player1");
     let playerO = player("Player2");
     const players = [playerX, playerO];
+    let winner = false;
 
     let turn = 0;
 
@@ -205,19 +206,27 @@ const gameController = (() => {
         if (gameStatus !== false) {
             if (gameStatus[1] === "x") {
                 playerX.winIncrement();
+                winner = players[0];
             }
             if (gameStatus[1] === "o") {
                 playerO.winIncrement();
+                winner = players[1];
             }
 
             _invokeCallbacks();
+            winner = false;
         }
 
         if (gameDraw !== false) {
             // Draw
             _invokeCallbacks();
+            winner = false;
         }
     };
+
+    const getWinner = () => {
+        return winner;
+    }
 
     const callbacks = [];
 
@@ -238,6 +247,7 @@ const gameController = (() => {
         play,
         getPlayers,
         addCallback,
+        getWinner,
     }
 })();
 
@@ -325,7 +335,6 @@ const displayController = (() => {
         // map and check if gameboard has changed
         // If it has changed update gameboard var here
         // Update DOM
-        console.log(gameboard.getBoard());
         const gameboardContainer = document.querySelector(".gameboard");
 
         // Remove all buttons
@@ -338,9 +347,31 @@ const displayController = (() => {
         listenForPlayEvent();
     }
 
-    const renderPlayerScore = () => {
+    const renderPlayerInfo = () => {
         // A text element that will be positioned under players name?
 
+        const container = document.querySelector(".container");
+
+        const players = gameController .getPlayers().map((player) => {
+
+            const playerInfoNode = document.createElement("div");
+            playerInfoNode.classList.add("player-info");
+            playerInfoNode.setAttribute("data-player", `${player.getName()}`);
+
+            const playerNameText = document.createElement("h2");
+            playerNameText.textContent = player.getName();
+            playerInfoNode.appendChild(playerNameText);
+
+            const playerNameScore = document.createElement("p");
+            playerNameScore.textContent = player.getWins();
+            playerInfoNode.appendChild(playerNameScore);
+            
+            return playerInfoNode;
+        });
+  
+        players.forEach((player) => {
+            container.appendChild(player);
+        });
     }
 
     const renderWinnerDisplay = () => {
@@ -352,26 +383,23 @@ const displayController = (() => {
         // Perhaps I should check and compare each players wins 
     }
 
-    const renderPlayerName = () => {
-        // Text element that will be under left/right of rendered gameboard
-    }
-
     // Update text in DOM
-    const updatePlayerScore = () => {
+    const updatePlayerInfo = () => {
+        const playerNodes = document.querySelectorAll("[data-player]");
+        playerNodes.forEach((playerNode) => {
+            playerNode.remove();
+        })
 
-    }
-
-    const updatePlayerName = () => {
-
+        displayController.renderPlayerInfo();
     }
 
     return {
         renderGameboard,
-        renderPlayerScore,
-        renderPlayerName,
-        updatePlayerScore,
-        updatePlayerName,
+        renderPlayerInfo,
+        updatePlayerInfo,
         updateGameboard,
+        updateWinnerDisplay,
+        renderWinnerDisplay,
     }
 })();
 
@@ -381,12 +409,15 @@ const handlePageLoad = (() => {
     window.onload = () => {
         // Render gameboard
         displayController.renderGameboard();
+        displayController.renderPlayerInfo();
+        displayController.renderWinnerDisplay();
 
         // After gameboard is rendered we can add event listeners on the rendered game
         listenForPlayEvent();
         
         // Add displayController cb functions to cb list in gameController
         gameController.addCallback(displayController.updateGameboard);
+        gameController.addCallback(listenForPlayerWin);
     }
 })();
 
@@ -398,6 +429,15 @@ const listenForPlayEvent = () => {
             gameController.play(Number(e.target.getAttribute("data-cell")));
         })
     })
+};
+
+const listenForPlayerWin = () => {
+    const winner = gameController.getWinner();
+    if (winner !== false) {
+        console.log(winner.getName());
+        displayController.updatePlayerInfo();
+        displayController.updateWinnerDisplay();
+    }
 };
 
 // Check if player name is being edited 
