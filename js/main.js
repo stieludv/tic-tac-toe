@@ -213,12 +213,18 @@ const gameController = (() => {
                 winner = players[1];
             }
 
+            gameboard.clear();
+
             _invokeCallbacks();
             winner = false;
         }
 
         if (gameDraw !== false) {
             // Draw
+            winner = "draw";
+
+            gameboard.clear();
+
             _invokeCallbacks();
             winner = false;
         }
@@ -437,6 +443,7 @@ const listenForPlayerWin = () => {
         console.log(winner.getName());
         displayController.updatePlayerInfo();
         displayController.updateWinnerDisplay();
+        displayController.updateGameboard();
     }
 };
 
