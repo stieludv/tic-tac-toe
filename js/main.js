@@ -46,7 +46,7 @@ const gameboard = (() => {
         if (board[4] !== "") {
             // It will be either X or O in the middle
             // Check for positive diagonal win
-            if (board[0] !== "" && board[8] !== "" && _verifyMatchingMarkers([board[2], board[4], board[6]])) {
+            if (board[2] !== "" && board[6] !== "" && _verifyMatchingMarkers([board[2], board[4], board[6]])) {
                 return [true, board[4]];
             }
 
@@ -219,9 +219,9 @@ const gameController = (() => {
             winner = false;
         }
 
-        if (gameDraw !== false) {
+        if (gameDraw === true) {
             // Draw
-            winner = "draw";
+            winner = false;
 
             gameboard.clear();
 
